@@ -1,14 +1,18 @@
 const express = require('express');
+const axios = require('axios');
 
 const app = express();
 
-app.post('/webhook', (req, res) => {
+app.post('/webhook', express.json({type: 'application/json'}), (req, res) => {
     res.status(202).send('Accepted');
 
     const githubEvent = req.headers['x-github-event'];
 
-    console.log(githubEvent);
-    console.log(req.body);
+    axios.post('/test-route', {
+            chat_id: 343606892,
+            text: `Пришло событие ${githubEvent} от репозитория`,
+        }
+    )
 });
 
 app.listen(8080, () => {
